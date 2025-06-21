@@ -3,13 +3,19 @@ const { marked } = require('marked');
 const path = require('path');
 const ChangelogReader = require('./utils/changelogReader');
 
+// Import API routes
+const githubRoutes = require('./api/github');
+const llmRoutes = require('./api/llm');
+const changelogRoutes = require('./api/changelog');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Initialize changelog reader
 const changelogReader = new ChangelogReader();
 
-// Serve static files from the React build
+// Middleware
+app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 // Configure marked for better rendering
@@ -17,6 +23,11 @@ marked.setOptions({
   breaks: true,
   gfm: true
 });
+
+// API Routes
+app.use('/api/github', githubRoutes);
+app.use('/api/llm', llmRoutes);
+app.use('/api/changelog', changelogRoutes);
 
 // API endpoint to get changelog as JSON (markdown)
 app.get('/api/changelog', async (req, res) => {
