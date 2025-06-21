@@ -1,0 +1,18 @@
+{
+  "name": "changelog-website",
+  "version": "1.0.0",
+  "description": "A simple website to display changelog from a text file",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "marked": "^9.1.0",
+    "fs": "^0.0.1-security"
+  },
+  "keywords": ["changelog", "website"],
+  "author": "",
+  "license": "MIT"
+} 
