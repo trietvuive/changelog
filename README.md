@@ -11,7 +11,7 @@ A comprehensive changelog management system with both viewing and generation cap
 - Markdown rendering with syntax highlighting
 
 ### ✨ Changelog Generator
-- **GitHub Integration**: Connect to any GitHub repository
+- **GitHub Integration**: Connect to any GitHub repository with your own PAT
 - **Commit Analysis**: Fetch commits between specified ranges
 - **AI-Powered Summarization**: Use OpenAI to generate professional changelog entries
 - **Automatic Categorization**: Commits are automatically categorized by type
@@ -57,18 +57,7 @@ A comprehensive changelog management system with both viewing and generation cap
 
 ### Environment Variables
 
-Create a `.env` file in the root directory with the following variables:
-
-#### GitHub Integration
-- **GITHUB_TOKEN**: Your GitHub Personal Access Token
-  - Generate at: https://github.com/settings/tokens
-  - Requires `repo` scope for private repositories
-  - Requires `public_repo` scope for public repositories
-
-#### OpenAI Integration
-- **OPENAI_API_KEY**: Your OpenAI API Key
-  - Get at: https://platform.openai.com/api-keys
-  - Uses GPT-3.5-turbo model by default
+Create a `.env` file that follows env.example
 
 ### Security Notes
 - Never commit your `.env` file to version control
