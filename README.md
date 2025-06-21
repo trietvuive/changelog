@@ -100,45 +100,6 @@ Create a `.env` file in the root directory with the following variables:
    - Click "Generate Changelog" to create AI-powered summary
    - Review and save the generated changelog
 
-## File Structure
-
-```
-changelog/
-├── src/
-│   ├── components/
-│   │   ├── Changelog/
-│   │   │   └── Changelog.jsx          # Changelog viewer component
-│   │   ├── ChangelogGenerator/
-│   │   │   ├── ChangelogGenerator.jsx # Generator component
-│   │   │   └── ChangelogGenerator.css # Generator styles
-│   │   └── Navigation/
-│   │       ├── Navigation.jsx         # Navigation component
-│   │       └── Navigation.css         # Navigation styles
-│   ├── pages/
-│   │   ├── ChangelogPage.jsx          # Changelog page
-│   │   ├── ChangelogPage.css          # Changelog page styles
-│   │   ├── GeneratorPage.jsx          # Generator page
-│   │   └── GeneratorPage.css          # Generator page styles
-│   ├── api/
-│   │   ├── github.js                  # GitHub API integration
-│   │   ├── llm.js                     # OpenAI integration
-│   │   └── changelog.js               # Changelog management
-│   ├── contexts/
-│   │   └── DarkModeContext.jsx        # Dark mode context
-│   ├── utils/
-│   │   └── changelogReader.js         # TOML file reader
-│   ├── App.jsx                        # Main app component
-│   ├── App.css                        # App styles
-│   ├── main.jsx                       # React entry point
-│   ├── index.css                      # Global styles
-│   └── server.js                      # Express server
-├── changelog.toml                     # Changelog data file
-├── .env                               # Environment variables (create from env.example)
-├── env.example                        # Example environment file
-├── package.json                       # Dependencies
-└── vite.config.js                     # Vite configuration
-```
-
 ## API Endpoints
 
 ### Changelog Management
