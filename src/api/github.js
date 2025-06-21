@@ -3,25 +3,62 @@ const axios = require('axios');
 
 const router = express.Router();
 
+// Filter commits based on fromSha and toSha parameters
+const filterCommitsByRange = (commits, fromSha, toSha) => {
+  if (!toSha) {
+    return commits;
+  }
+
+  console.log(`Filtering commits to ${toSha}`);
+  
+  // Find the index of the 'to' commit to stop at
+  const toIndex = commits.findIndex(commit => 
+    commit.sha === toSha || commit.sha.startsWith(toSha)
+  );
+  
+  if (toIndex !== -1) {
+    // Include commits up to (but not including) the 'to' commit
+    const filteredCommits = commits.slice(0, toIndex);
+    console.log(`Filtered to ${filteredCommits.length} commits`);
+    return filteredCommits;
+  } else {
+    console.log(`Could not find 'to' commit ${toSha}, returning all commits`);
+    return commits;
+  }
+};
+
 // Fetch commits from GitHub repository
 router.post('/commits', async (req, res) => {
   try {
-    const { owner, repo, token, from, to } = req.body;
+    console.log('GitHub commits request received:', {
+      body: req.body,
+    })
 
-    if (!owner || !repo || !token) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    const { owner, repo, fromSha, toSha } = req.body;
+    const githubToken = process.env.GITHUB_TOKEN;
+
+    console.log('Environment check:', {
+      hasGithubToken: !!githubToken,
+      tokenPrefix: githubToken ? githubToken.substring(0, 10) + '...' : 'none'
+    })
+
+    if (!owner || !repo) {
+      console.log('Validation failed: missing owner or repo')
+      return res.status(400).json({ error: 'Repository owner and name are required' });
+    }
+
+    if (!githubToken) {
+      console.log('GitHub token not configured')
+      return res.status(500).json({ error: 'GitHub token not configured. Please set GITHUB_TOKEN environment variable.' });
     }
 
     // Build the GitHub API URL
     let url = `https://api.github.com/repos/${owner}/${repo}/commits`;
     const params = new URLSearchParams();
 
-    if (from && to) {
-      params.append('sha', `${from}..${to}`);
-    } else if (from) {
-      params.append('sha', from);
-    } else if (to) {
-      params.append('sha', to);
+    // Set the starting point for commits
+    if (fromSha) {
+      params.append('sha', fromSha);
     }
 
     // Add pagination
@@ -31,23 +68,30 @@ router.post('/commits', async (req, res) => {
       url += `?${params.toString()}`;
     }
 
+    console.log('Making GitHub API request to:', url)
+
     // Fetch commits from GitHub
     const response = await axios.get(url, {
       headers: {
-        'Authorization': `token ${token}`,
+        'Authorization': `token ${githubToken}`,
         'Accept': 'application/vnd.github.v3+json',
         'User-Agent': 'Changelog-Generator'
       }
     });
 
+    console.log('GitHub API response received, commits count:', response.data.length)
+
     // Transform the response
-    const commits = response.data.map(commit => ({
+    let commits = response.data.map(commit => ({
       sha: commit.sha,
       message: commit.commit.message,
       author: commit.commit.author.name,
       date: commit.commit.author.date,
       url: commit.html_url
     }));
+
+    // Filter commits based on range
+    commits = filterCommitsByRange(commits, fromSha, toSha);
 
     res.json({ commits });
 
@@ -68,15 +112,15 @@ router.post('/commits', async (req, res) => {
 router.get('/repo/:owner/:repo', async (req, res) => {
   try {
     const { owner, repo } = req.params;
-    const { token } = req.query;
+    const githubToken = process.env.GITHUB_TOKEN;
 
-    if (!token) {
-      return res.status(400).json({ error: 'GitHub token required' });
+    if (!githubToken) {
+      return res.status(500).json({ error: 'GitHub token not configured. Please set GITHUB_TOKEN environment variable.' });
     }
 
     const response = await axios.get(`https://api.github.com/repos/${owner}/${repo}`, {
       headers: {
-        'Authorization': `token ${token}`,
+        'Authorization': `token ${githubToken}`,
         'Accept': 'application/vnd.github.v3+json',
         'User-Agent': 'Changelog-Generator'
       }
@@ -102,15 +146,15 @@ router.get('/repo/:owner/:repo', async (req, res) => {
 router.get('/tags/:owner/:repo', async (req, res) => {
   try {
     const { owner, repo } = req.params;
-    const { token } = req.query;
+    const githubToken = process.env.GITHUB_TOKEN;
 
-    if (!token) {
-      return res.status(400).json({ error: 'GitHub token required' });
+    if (!githubToken) {
+      return res.status(500).json({ error: 'GitHub token not configured. Please set GITHUB_TOKEN environment variable.' });
     }
 
     const response = await axios.get(`https://api.github.com/repos/${owner}/${repo}/tags`, {
       headers: {
-        'Authorization': `token ${token}`,
+        'Authorization': `token ${githubToken}`,
         'Accept': 'application/vnd.github.v3+json',
         'User-Agent': 'Changelog-Generator'
       }

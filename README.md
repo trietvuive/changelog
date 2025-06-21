@@ -24,39 +24,63 @@ A comprehensive changelog management system with both viewing and generation cap
    npm install
    ```
 
-2. **Start the development server**:
+2. **Set up environment variables**:
+   ```bash
+   cp env.example .env
+   ```
+   
+   Edit `.env` and add your API keys:
+   ```env
+   # GitHub Personal Access Token
+   GITHUB_TOKEN=ghp_your_github_token_here
+   
+   # OpenAI API Key
+   OPENAI_API_KEY=sk-your_openai_api_key_here
+   ```
+
+3. **Start the development server**:
    ```bash
    npm run dev
    ```
 
-3. **Build for production**:
+4. **Build for production**:
    ```bash
    npm run build
    npm start
    ```
 
-4. **Access the application**:
+5. **Access the application**:
    - Open http://localhost:3000
    - Use the navigation tabs to switch between viewing and generating changelogs
 
 ## Configuration
 
-### GitHub Integration
-To use the changelog generator, you'll need:
-- **GitHub Personal Access Token**: Generate one at https://github.com/settings/tokens
-- **Repository Access**: Ensure your token has access to the repositories you want to analyze
+### Environment Variables
 
-### OpenAI Integration
-For AI-powered changelog generation:
-- **OpenAI API Key**: Get one at https://platform.openai.com/api-keys
-- **Model**: Uses GPT-3.5-turbo by default
+Create a `.env` file in the root directory with the following variables:
+
+#### GitHub Integration
+- **GITHUB_TOKEN**: Your GitHub Personal Access Token
+  - Generate at: https://github.com/settings/tokens
+  - Requires `repo` scope for private repositories
+  - Requires `public_repo` scope for public repositories
+
+#### OpenAI Integration
+- **OPENAI_API_KEY**: Your OpenAI API Key
+  - Get at: https://platform.openai.com/api-keys
+  - Uses GPT-3.5-turbo model by default
+
+### Security Notes
+- Never commit your `.env` file to version control
+- The `.env` file is already in `.gitignore`
+- API keys are stored server-side only, never sent to the client
 
 ## Usage
 
 ### Viewing Changelogs
 1. Navigate to the "View Changelog" tab
 2. Your changelog entries are displayed in chronological order
-3. Toggle dark mode using the theme button
+3. Toggle dark mode using the theme button in the navigation
 4. Changelog is automatically loaded from `changelog.toml`
 
 ### Generating Changelogs
@@ -64,16 +88,13 @@ For AI-powered changelog generation:
 2. **Repository Setup**:
    - Enter repository owner (e.g., "facebook")
    - Enter repository name (e.g., "react")
-   - Provide your GitHub Personal Access Token
 3. **Commit Range** (optional):
    - Specify "from" and "to" commits or tags
    - Leave empty to fetch recent commits
 4. **Release Information**:
    - Enter version number (e.g., "2.1.0")
    - Add release title (optional)
-5. **AI Configuration**:
-   - Provide your OpenAI API key
-6. **Generate**:
+5. **Generate**:
    - Click "Fetch Commits" to retrieve commits from GitHub
    - Review the commits list
    - Click "Generate Changelog" to create AI-powered summary
@@ -87,13 +108,23 @@ changelog/
 │   ├── components/
 │   │   ├── Changelog/
 │   │   │   └── Changelog.jsx          # Changelog viewer component
-│   │   └── ChangelogGenerator/
-│   │       ├── ChangelogGenerator.jsx # Generator component
-│   │       └── ChangelogGenerator.css # Generator styles
+│   │   ├── ChangelogGenerator/
+│   │   │   ├── ChangelogGenerator.jsx # Generator component
+│   │   │   └── ChangelogGenerator.css # Generator styles
+│   │   └── Navigation/
+│   │       ├── Navigation.jsx         # Navigation component
+│   │       └── Navigation.css         # Navigation styles
+│   ├── pages/
+│   │   ├── ChangelogPage.jsx          # Changelog page
+│   │   ├── ChangelogPage.css          # Changelog page styles
+│   │   ├── GeneratorPage.jsx          # Generator page
+│   │   └── GeneratorPage.css          # Generator page styles
 │   ├── api/
 │   │   ├── github.js                  # GitHub API integration
 │   │   ├── llm.js                     # OpenAI integration
 │   │   └── changelog.js               # Changelog management
+│   ├── contexts/
+│   │   └── DarkModeContext.jsx        # Dark mode context
 │   ├── utils/
 │   │   └── changelogReader.js         # TOML file reader
 │   ├── App.jsx                        # Main app component
@@ -102,6 +133,8 @@ changelog/
 │   ├── index.css                      # Global styles
 │   └── server.js                      # Express server
 ├── changelog.toml                     # Changelog data file
+├── .env                               # Environment variables (create from env.example)
+├── env.example                        # Example environment file
 ├── package.json                       # Dependencies
 └── vite.config.js                     # Vite configuration
 ```
@@ -161,11 +194,14 @@ content = """
 
 ### Environment Variables
 - `PORT` - Server port (default: 3000)
+- `GITHUB_TOKEN` - GitHub Personal Access Token
+- `OPENAI_API_KEY` - OpenAI API Key
 
 ## Security Notes
 
-- GitHub tokens and OpenAI API keys are sent to the server for processing
-- Keys are not stored permanently but are used for API calls
+- API keys are stored in environment variables and never exposed to the client
+- GitHub tokens and OpenAI API keys are used server-side only
+- The `.env` file is gitignored to prevent accidental commits
 - Consider using environment variables for production deployments
 - Implement proper authentication for production use
 
@@ -183,4 +219,3 @@ MIT License - see LICENSE file for details
 
 ```
 npm install && npm start
-```

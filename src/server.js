@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { marked } = require('marked');
 const path = require('path');
@@ -101,4 +102,10 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Changelog website running on http://localhost:${PORT}`);
   console.log(`📄 Reading changelog from: ${changelogReader.filePath}`);
+  console.log('🔧 Environment check:', {
+    hasGithubToken: !!process.env.GITHUB_TOKEN,
+    hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+    githubTokenPrefix: process.env.GITHUB_TOKEN ? process.env.GITHUB_TOKEN.substring(0, 10) + '...' : 'none',
+    openaiKeyPrefix: process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 10) + '...' : 'none'
+  });
 }); 
