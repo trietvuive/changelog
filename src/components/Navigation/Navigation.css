@@ -1,0 +1,109 @@
+.navigation {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-primary);
+    box-shadow: 0 2px 4px var(--shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 60px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+}
+
+.brand-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.brand-link:hover {
+    color: var(--border-secondary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.nav-link:hover {
+    background: var(--hover-bg);
+    border-color: var(--border-primary);
+}
+
+.nav-link.active {
+    background: var(--border-secondary);
+    color: white;
+    border-color: var(--border-secondary);
+}
+
+.theme-toggle {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 36px;
+}
+
+.theme-toggle:hover {
+    background: var(--hover-bg);
+    border-color: var(--border-secondary);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+        min-height: auto;
+    }
+
+    .nav-links {
+        gap: 10px;
+    }
+
+    .nav-link {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+
+    .brand-link {
+        font-size: 1.1rem;
+    }
+
+    .theme-toggle {
+        padding: 10px 12px;
+        font-size: 1rem;
+    }
+}
