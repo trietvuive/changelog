@@ -8,8 +8,9 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
           <h3>GitHub Repository</h3>
           <div className="form-row">
             <div className="form-group">
-              <label>Repository Owner</label>
+              <label htmlFor="repoOwner">Repository Owner</label>
               <input
+                id="repoOwner"
                 type="text"
                 name="repoOwner"
                 value={formData.repoOwner}
@@ -18,8 +19,9 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
               />
             </div>
             <div className="form-group">
-              <label>Repository Name</label>
+              <label htmlFor="repoName">Repository Name</label>
               <input
+                id="repoName"
                 type="text"
                 name="repoName"
                 value={formData.repoName}
@@ -34,23 +36,25 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
           <h3>Commit Range</h3>
           <div className="form-row">
             <div className="form-group">
-              <label>From Commit (optional)</label>
+              <label htmlFor="fromCommit">From Commit (optional)</label>
               <input
+                id="fromCommit"
                 type="text"
                 name="fromCommit"
                 value={formData.fromCommit}
                 onChange={onInputChange}
-                placeholder="inclusive. latest commit"
+                placeholder="e.g., v1.0.0 or commit hash"
               />
             </div>
             <div className="form-group">
-              <label>To Commit (optional)</label>
+              <label htmlFor="toCommit">To Commit (optional)</label>
               <input
+                id="toCommit"
                 type="text"
                 name="toCommit"
                 value={formData.toCommit}
                 onChange={onInputChange}
-                placeholder="inclusive. earliest commit"
+                placeholder="e.g., HEAD or commit hash"
               />
             </div>
           </div>
@@ -60,8 +64,9 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
           <h3>Release Information</h3>
           <div className="form-row">
             <div className="form-group">
-              <label>Version</label>
+              <label htmlFor="version">Version</label>
               <input
+                id="version"
                 type="text"
                 name="version"
                 value={formData.version}
@@ -70,8 +75,9 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
               />
             </div>
             <div className="form-group">
-              <label>Release Title</label>
+              <label htmlFor="title">Release Title</label>
               <input
+                id="title"
                 type="text"
                 name="title"
                 value={formData.title}

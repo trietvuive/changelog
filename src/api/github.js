@@ -175,4 +175,7 @@ router.get('/tags/:owner/:repo', async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = {
+  router,
+  filterCommitsByRange
+}; 

@@ -5,7 +5,7 @@ const path = require('path');
 const ChangelogReader = require('./utils/changelogReader');
 
 // Import API routes
-const githubRoutes = require('./api/github');
+const { router: githubRoutes } = require('./api/github');
 const llmRoutes = require('./api/llm');
 const changelogRoutes = require('./api/changelog');
 
