@@ -1,6 +1,6 @@
 const express = require('express');
 const { marked } = require('marked');
-const { getMainTemplate, getErrorTemplate } = require('./components/templates');
+const path = require('path');
 const ChangelogReader = require('./utils/changelogReader');
 
 const app = express();
@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 3000;
 // Initialize changelog reader
 const changelogReader = new ChangelogReader();
 
-// Serve static files
-app.use(express.static('public'));
+// Serve static files from the React build
+app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 // Configure marked for better rendering
 marked.setOptions({
@@ -18,30 +18,7 @@ marked.setOptions({
   gfm: true
 });
 
-// Main route to display changelog
-app.get('/', async (req, res) => {
-  try {
-    // Read the changelog file
-    const result = await changelogReader.readChangelog();
-    
-    if (!result.success) {
-      console.error('Error reading changelog:', result.error);
-      return res.status(500).send(getErrorTemplate());
-    }
-    
-    // Convert markdown to HTML
-    const htmlContent = marked(result.content);
-    
-    // Send the HTML page
-    res.send(getMainTemplate(htmlContent));
-    
-  } catch (error) {
-    console.error('Unexpected error:', error);
-    res.status(500).send(getErrorTemplate());
-  }
-});
-
-// API endpoint to get changelog as JSON
+// API endpoint to get changelog as JSON (markdown)
 app.get('/api/changelog', async (req, res) => {
   try {
     const result = await changelogReader.readChangelog();
@@ -57,6 +34,24 @@ app.get('/api/changelog', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load changelog' });
+  }
+});
+
+// API endpoint to get raw TOML data
+app.get('/api/changelog/raw', async (req, res) => {
+  try {
+    const result = await changelogReader.readChangelog();
+    
+    if (!result.success) {
+      return res.status(500).json({ error: 'Failed to load changelog' });
+    }
+    
+    res.json({
+      rawData: result.rawData,
+      lastUpdated: result.lastModified
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load changelog data' });
   }
 });
 
@@ -85,6 +80,11 @@ app.get('/api/file-info', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Failed to get file info' });
   }
+});
+
+// Serve React app for all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
 app.listen(PORT, () => {
