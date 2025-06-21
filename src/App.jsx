@@ -5,10 +5,25 @@ function App() {
   const [changelog, setChangelog] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [darkMode, setDarkMode] = useState(() => {
+    // Check localStorage for saved preference, default to dark mode
+    const saved = localStorage.getItem('darkMode')
+    if (saved !== null) {
+      return JSON.parse(saved)
+    }
+    return true // Default to dark mode
+  })
 
   useEffect(() => {
     fetchChangelog()
   }, [])
+
+  useEffect(() => {
+    // Save preference to localStorage
+    localStorage.setItem('darkMode', JSON.stringify(darkMode))
+    // Update document class for CSS variables
+    document.documentElement.classList.toggle('dark', darkMode)
+  }, [darkMode])
 
   const fetchChangelog = async () => {
     try {
@@ -24,6 +39,10 @@ function App() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode)
   }
 
   if (loading) {
@@ -77,8 +96,17 @@ function App() {
   return (
     <div className="container">
       <div className="header">
-        <h1>📋 Changelog</h1>
-        <p>Track the latest updates and changes to our platform</p>
+        <div className="header-content">
+          <h1>📋 Changelog</h1>
+          <p>Track the latest updates and changes to our platform</p>
+        </div>
+        <button 
+          onClick={toggleDarkMode}
+          className="theme-toggle"
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {darkMode ? '☀️' : '🌙'}
+        </button>
       </div>
       
       <div 
