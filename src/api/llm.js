@@ -42,7 +42,7 @@ router.post('/generate-changelog', async (req, res) => {
     console.log('Sending request to OpenAI...')
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
@@ -104,7 +104,7 @@ router.post('/analyze-commits', async (req, res) => {
     const prompt = analyzeCommitsPrompt(commits);
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
