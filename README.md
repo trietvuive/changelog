@@ -1,5 +1,5 @@
 # Changelog Manager
-**DISCLAIMER: THIS IS A PROTOTYPE. DEPLOY AT YOUR OWN RISK**
+**DISCLAIMER: THIS IS CURRENTLY A PROTOTYPE. DEPLOY AT YOUR OWN RISK**
 - use toml (better than JSON) to build the changelog
 - fetch a range of commits and use LLM to generate changelog from it. This works best since you can scrap any data automatically from GitHub API (can extend to PR description, reviews,...)
 - add to the toml file and renders the changelog
