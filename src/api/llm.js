@@ -41,6 +41,7 @@ router.post('/generate-changelog', async (req, res) => {
 
     console.log('Sending request to OpenAI with prompt:', prompt);
 
+
     const completion = await openai.chat.completions.create({
       model: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
       messages: [
@@ -57,23 +58,23 @@ router.post('/generate-changelog', async (req, res) => {
       temperature: 0.7,
     });
 
+
 /*
-    Mock this if you got rate-limited by chatGPT :)
-    const mockchatGPTResponse = `
-    [[versions]]
-    version = "1.0.0"
-    date = "2025-06-22"
-    title = "Adding NNUE Evaluation"
-    
-    [[versions.changes]]
-    type = "feature"
-    title = "Initial NNUE integration"
-    description = "Introduced foundational support for NNUE (Efficiently Updatable Neural Networks) evaluation, enabling enhanced positional assessment capabilities."
-    
-    [[versions.changes]]
-    type = "other"
-    title = "Added project logo"
-    description = "Included a new logo asset to represent the project visually."
+    // Mock this if you can't afford chatGPT :)
+    const mockchatGPTResponse = `[[versions]]
+version = "1.0.0"
+date = "2025-06-22"
+title = "Enhancement in UX"
+
+[[versions.changes]]
+type = "feature"
+title = "Initial NNUE integration"
+description = "Introduced foundational support for NNUE (Efficiently Updatable Neural Networks) evaluation, enabling enhanced positional assessment capabilities."
+
+[[versions.changes]]
+type = "other"
+title = "Added project logo"
+description = "Included a new logo asset to represent the project visually."
     `;
 
 

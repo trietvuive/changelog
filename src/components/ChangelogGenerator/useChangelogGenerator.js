@@ -109,7 +109,9 @@ export function useChangelogGenerator() {
     }
   }
 
-  const saveChangelog = async () => {
+  const saveChangelog = async (editedChangelog = null) => {
+    const changelogToSave = editedChangelog || generatedChangelog;
+    
     try {
       const response = await fetch('/api/changelog/save-changelog', {
         method: 'POST',
@@ -117,7 +119,7 @@ export function useChangelogGenerator() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          changelog: generatedChangelog,
+          changelog: changelogToSave,
           version: formData.version,
           title: formData.title
         })
