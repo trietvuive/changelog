@@ -98,32 +98,6 @@ Create a `.env` file that follows env.example
 ### AI Integration
 - `POST /api/llm/generate-changelog` - Generate changelog with AI
 
-## Changelog Format
-
-The application uses TOML format for storing changelog data:
-
-```toml
-[[versions]]
-version = "2.1.0"
-title = "Feature Release"
-date = "2024-01-15"
-content = """
-## Version 2.1.0 - 2024-01-15
-
-### ✨ New Features
-- Added user authentication system
-- Implemented real-time notifications
-
-### 🐛 Bug Fixes
-- Fixed login form validation
-- Resolved navigation issues
-
-### 🔧 Improvements
-- Enhanced performance optimization
-- Updated documentation
-"""
-```
-
 ## Development
 
 ### Available Scripts
@@ -131,6 +105,8 @@ content = """
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run preview` - Preview production build
+- `npm test` - Run unit tests
+- `npm lint` - Run linter
 
 ### Environment Variables
 - `PORT` - Server port (default: 3000)
@@ -155,7 +131,4 @@ content = """
 
 ## License
 
-MIT License - see LICENSE file for details
-
-```
-npm install && npm start
+MIT License - see LICENSE file for detail
