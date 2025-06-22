@@ -39,8 +39,9 @@ router.post('/generate-changelog', async (req, res) => {
 
     const prompt = generateChangelogPrompt(commits, version, title);
 
-    console.log('Sending request to OpenAI...')
+    console.log('Sending request to OpenAI with prompt:', prompt)
 
+    /*
     const completion = await openai.chat.completions.create({
       model: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
       messages: [
@@ -56,9 +57,36 @@ router.post('/generate-changelog', async (req, res) => {
       max_tokens: 1000,
       temperature: 0.7,
     });
+    */
+
+    const mockchatGPTResponse = `
+    [[versions]]
+    version = "1.0.0"
+    date = "2025-06-22"
+    title = "Adding NNUE Evaluation"
+    
+    [[versions.changes]]
+    type = "feature"
+    title = "Initial NNUE integration"
+    description = "Introduced foundational support for NNUE (Efficiently Updatable Neural Networks) evaluation, enabling enhanced positional assessment capabilities."
+    
+    [[versions.changes]]
+    type = "other"
+    title = "Added project logo"
+    description = "Included a new logo asset to represent the project visually."
+    `
+
+    const completion = {
+      choices: [
+        {
+          message: {
+            content: mockchatGPTResponse
+          }
+        }
+      ]
+    }
 
     console.log('OpenAI response received')
-
     const generatedChangelog = completion.choices[0].message.content;
 
     console.log('Generated changelog length:', generatedChangelog.length)

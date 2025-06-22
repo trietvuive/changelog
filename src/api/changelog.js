@@ -1,9 +1,8 @@
 const express = require('express');
-const fs = require('fs').promises;
-const path = require('path');
-const toml = require('@iarna/toml');
+const ChangelogReader = require('../utils/changelogReader');
 
 const router = express.Router();
+const changelogReader = new ChangelogReader();
 
 // Save generated changelog entry
 router.post('/save-changelog', async (req, res) => {
@@ -14,51 +13,11 @@ router.post('/save-changelog', async (req, res) => {
       return res.status(400).json({ error: 'Changelog content and version are required' });
     }
 
-    const changelogPath = path.join(process.cwd(), 'changelog.toml');
+    const result = await changelogReader.addVersion(version, title, changelog);
     
-    // Read existing changelog
-    let existingContent = '';
-    try {
-      existingContent = await fs.readFile(changelogPath, 'utf8');
-    } catch (error) {
-      // File doesn't exist, start with empty content
-      existingContent = '';
+    if (!result.success) {
+      return res.status(500).json({ error: result.error });
     }
-
-    // Parse existing TOML or create new structure
-    let changelogData;
-    if (existingContent.trim()) {
-      try {
-        changelogData = toml.parse(existingContent);
-      } catch (error) {
-        console.error('Error parsing existing TOML:', error);
-        changelogData = { versions: [] };
-      }
-    } else {
-      changelogData = { versions: [] };
-    }
-
-    // Ensure versions array exists
-    if (!changelogData.versions) {
-      changelogData.versions = [];
-    }
-
-    // Create new version entry
-    const newVersion = {
-      version: version,
-      title: title || `Version ${version}`,
-      date: new Date().toISOString().split('T')[0],
-      content: changelog
-    };
-
-    // Add to beginning of versions array (newest first)
-    changelogData.versions.unshift(newVersion);
-
-    // Convert back to TOML
-    const newTomlContent = toml.stringify(changelogData);
-
-    // Write to file
-    await fs.writeFile(changelogPath, newTomlContent, 'utf8');
 
     res.json({ 
       success: true, 
@@ -76,14 +35,13 @@ router.post('/save-changelog', async (req, res) => {
 // Get all versions
 router.get('/versions', async (req, res) => {
   try {
-    const changelogPath = path.join(process.cwd(), 'changelog.toml');
+    const result = await changelogReader.getAllVersions();
     
-    const content = await fs.readFile(changelogPath, 'utf8');
-    const changelogData = toml.parse(content);
+    if (!result.success) {
+      return res.status(500).json({ error: result.error });
+    }
 
-    const versions = changelogData.versions || [];
-    
-    res.json({ versions });
+    res.json({ versions: result.versions });
 
   } catch (error) {
     console.error('Error reading versions:', error);
@@ -95,24 +53,12 @@ router.get('/versions', async (req, res) => {
 router.delete('/versions/:version', async (req, res) => {
   try {
     const { version } = req.params;
-    const changelogPath = path.join(process.cwd(), 'changelog.toml');
     
-    const content = await fs.readFile(changelogPath, 'utf8');
-    const changelogData = toml.parse(content);
-
-    if (!changelogData.versions) {
-      return res.status(404).json({ error: 'No versions found' });
+    const result = await changelogReader.deleteVersion(version);
+    
+    if (!result.success) {
+      return res.status(404).json({ error: result.error });
     }
-
-    const initialLength = changelogData.versions.length;
-    changelogData.versions = changelogData.versions.filter(v => v.version !== version);
-
-    if (changelogData.versions.length === initialLength) {
-      return res.status(404).json({ error: 'Version not found' });
-    }
-
-    const newTomlContent = toml.stringify(changelogData);
-    await fs.writeFile(changelogPath, newTomlContent, 'utf8');
 
     res.json({ 
       success: true, 
@@ -130,35 +76,25 @@ router.put('/versions/:version', async (req, res) => {
   try {
     const { version } = req.params;
     const { title, content: newContent } = req.body;
-    const changelogPath = path.join(process.cwd(), 'changelog.toml');
     
-    const fileContent = await fs.readFile(changelogPath, 'utf8');
-    const changelogData = toml.parse(fileContent);
-
-    if (!changelogData.versions) {
-      return res.status(404).json({ error: 'No versions found' });
-    }
-
-    const versionIndex = changelogData.versions.findIndex(v => v.version === version);
-    if (versionIndex === -1) {
-      return res.status(404).json({ error: 'Version not found' });
-    }
-
-    // Update the version
+    const updates = {};
     if (title !== undefined) {
-      changelogData.versions[versionIndex].title = title;
+      updates.title = title;
     }
     if (newContent !== undefined) {
-      changelogData.versions[versionIndex].content = newContent;
+      updates.content = newContent;
     }
 
-    const newTomlContent = toml.stringify(changelogData);
-    await fs.writeFile(changelogPath, newTomlContent, 'utf8');
+    const result = await changelogReader.updateVersion(version, updates);
+    
+    if (!result.success) {
+      return res.status(404).json({ error: result.error });
+    }
 
     res.json({ 
       success: true, 
       message: 'Version updated successfully',
-      version: changelogData.versions[versionIndex]
+      version: result.version
     });
 
   } catch (error) {

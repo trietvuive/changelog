@@ -1,24 +1,33 @@
-const fs = require('fs').promises;
 const path = require('path');
-const TOML = require('@iarna/toml');
+const ChangelogEntry = require('./changelogEntry');
+const TomlProcessor = require('./tomlProcessor');
 
 class ChangelogReader {
   constructor(filePath = null) {
     this.filePath = filePath || path.join(__dirname, '..', '..', 'changelog.toml');
+    this.processor = new TomlProcessor(this.filePath);
   }
 
   async readChangelog() {
     try {
-      const content = await fs.readFile(this.filePath, 'utf-8');
-      const tomlData = TOML.parse(content);
+      const result = await this.processor.readChangelog();
       
-      // Convert TOML to markdown
-      const markdownContent = this.tomlToMarkdown(tomlData);
+      if (!result.success) {
+        return {
+          success: false,
+          error: result.error,
+          content: null,
+          rawData: null
+        };
+      }
+
+      // Convert TOML to markdown using ChangelogEntry
+      const markdownContent = this.convertTomlToMarkdown(result.data);
       
       return {
         success: true,
         content: markdownContent,
-        rawData: tomlData,
+        rawData: result.data,
         lastModified: new Date().toISOString()
       };
     } catch (error) {
@@ -31,10 +40,10 @@ class ChangelogReader {
     }
   }
 
-  tomlToMarkdown(tomlData) {
+  convertTomlToMarkdown(tomlData) {
     let markdown = '';
     
-    // Add title if present
+    // Add title and description if present
     if (tomlData.title) {
       markdown += `# ${tomlData.title}\n\n`;
     }
@@ -44,104 +53,33 @@ class ChangelogReader {
     }
 
     // Process versions
-    if (tomlData.versions && Array.isArray(tomlData.versions)) {
-      tomlData.versions.forEach(version => {
-        // Version header
-        const versionTitle = version.title || `Version ${version.version}`;
-        markdown += `## ${versionTitle} - ${version.date}\n\n`;
-        
-        // Group changes by type
-        const changesByType = this.groupChangesByType(version.changes);
-        
-        // Breaking changes first
-        if (changesByType.breaking && changesByType.breaking.length > 0) {
-          markdown += '### ⚠️ Breaking Changes\n\n';
-          changesByType.breaking.forEach(change => {
-            markdown += `- **${change.title}** - ${change.description}\n`;
-          });
-          markdown += '\n';
-        }
-        
-        // Features
-        if (changesByType.feature && changesByType.feature.length > 0) {
-          markdown += '### ✨ New Features\n\n';
-          changesByType.feature.forEach(change => {
-            markdown += `- **${change.title}** - ${change.description}\n`;
-          });
-          markdown += '\n';
-        }
-        
-        // Fixes
-        if (changesByType.fix && changesByType.fix.length > 0) {
-          markdown += '### 🐛 Bug Fixes\n\n';
-          changesByType.fix.forEach(change => {
-            markdown += `- **${change.title}** - ${change.description}\n`;
-          });
-          markdown += '\n';
-        }
-        
-        // Improvements
-        if (changesByType.improvement && changesByType.improvement.length > 0) {
-          markdown += '### 🔧 Improvements\n\n';
-          changesByType.improvement.forEach(change => {
-            markdown += `- **${change.title}** - ${change.description}\n`;
-          });
-          markdown += '\n';
-        }
-        
-        // Documentation
-        if (changesByType.docs && changesByType.docs.length > 0) {
-          markdown += '### 📚 Documentation\n\n';
-          changesByType.docs.forEach(change => {
-            markdown += `- **${change.title}** - ${change.description}\n`;
-          });
-          markdown += '\n';
-        }
-        
-        // Other changes
-        if (changesByType.other && changesByType.other.length > 0) {
-          markdown += '### 🔧 Other Changes\n\n';
-          changesByType.other.forEach(change => {
-            markdown += `- **${change.title}** - ${change.description}\n`;
-          });
-          markdown += '\n';
-        }
-        
-        // Add separator between versions
-        markdown += '---\n\n';
-      });
+    if (tomlData.versions && tomlData.versions.length > 0) {
+      for (const versionData of tomlData.versions) {
+        const entry = new ChangelogEntry(versionData);
+        markdown += entry.toMarkdown() + '\n\n';
+      }
     }
-    
-    return markdown.trim();
-  }
 
-  groupChangesByType(changes) {
-    const grouped = {
-      breaking: [],
-      feature: [],
-      fix: [],
-      improvement: [],
-      docs: [],
-      other: []
-    };
-    
-    if (changes && Array.isArray(changes)) {
-      changes.forEach(change => {
-        const type = change.type || 'other';
-        if (grouped[type]) {
-          grouped[type].push(change);
-        } else {
-          grouped.other.push(change);
-        }
-      });
-    }
-    
-    return grouped;
+    return markdown.trim();
   }
 
   async getFileInfo() {
     try {
+      const result = await this.processor.readChangelog();
+      
+      if (!result.success) {
+        return {
+          exists: false,
+          error: result.error,
+          path: this.filePath,
+          type: 'toml'
+        };
+      }
+
+      // Get file stats from the processor's file path
+      const fs = require('fs').promises;
       const stats = await fs.stat(this.filePath);
+      
       return {
         exists: true,
         size: stats.size,
@@ -159,8 +97,30 @@ class ChangelogReader {
     }
   }
 
+  // Delegate methods to tomlProcessor
+  async addVersion(version, title, changelog) {
+    return await this.processor.addVersion(version, title, changelog);
+  }
+
+  async getAllVersions() {
+    return await this.processor.getAllVersions();
+  }
+
+  async deleteVersion(version) {
+    return await this.processor.deleteVersion(version);
+  }
+
+  async updateVersion(version, updates) {
+    return await this.processor.updateVersion(version, updates);
+  }
+
+  async parseChangelogEntry(tomlString) {
+    return await this.processor.parseChangelogEntry(tomlString);
+  }
+
   setFilePath(newPath) {
     this.filePath = newPath;
+    this.processor.setFilePath(newPath);
   }
 }
 

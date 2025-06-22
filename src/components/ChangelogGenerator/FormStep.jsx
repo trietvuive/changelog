@@ -15,7 +15,7 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
                 name="repoOwner"
                 value={formData.repoOwner}
                 onChange={onInputChange}
-                placeholder="e.g., facebook"
+                placeholder="e.g., trietvuive"
               />
             </div>
             <div className="form-group">
@@ -26,7 +26,7 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
                 name="repoName"
                 value={formData.repoName}
                 onChange={onInputChange}
-                placeholder="e.g., react"
+                placeholder="e.g., DuckChess"
               />
             </div>
           </div>
@@ -43,7 +43,7 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
                 name="fromCommit"
                 value={formData.fromCommit}
                 onChange={onInputChange}
-                placeholder="e.g., v1.0.0 or commit hash"
+                placeholder="full commit hash of the latest commit"
               />
             </div>
             <div className="form-group">
@@ -54,7 +54,7 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
                 name="toCommit"
                 value={formData.toCommit}
                 onChange={onInputChange}
-                placeholder="e.g., HEAD or commit hash"
+                placeholder="full commit hash of the earliest commit"
               />
             </div>
           </div>
@@ -71,7 +71,7 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
                 name="version"
                 value={formData.version}
                 onChange={onInputChange}
-                placeholder="e.g., 2.1.0"
+                placeholder="e.g. 1.0.0"
               />
             </div>
             <div className="form-group">
@@ -82,7 +82,7 @@ function FormStep({ formData, onInputChange, onFetchCommits, loading, error }) {
                 name="title"
                 value={formData.title}
                 onChange={onInputChange}
-                placeholder="e.g., Feature Release"
+                placeholder="e.g., Adding NNUE evaluation"
               />
             </div>
           </div>
