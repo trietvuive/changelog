@@ -6,6 +6,11 @@
 - add unit tests to correct weird behaviors
 - also have dark mode for aesthetic
 
+Screen recording:
+https://github.com/user-attachments/assets/3414d2a0-96a9-4728-a39b-deb6f0ecdd1c
+
+
+
 ## Quick Start
 
 1. **Install dependencies**:
