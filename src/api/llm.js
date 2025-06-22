@@ -1,6 +1,6 @@
 const express = require('express');
 const OpenAI = require('openai');
-const { generateChangelogPrompt, analyzeCommitsPrompt, systemPrompts } = require('./prompts');
+const { generateChangelogPrompt, systemPrompts } = require('./prompts');
 
 const router = express.Router();
 
@@ -11,37 +11,36 @@ router.post('/generate-changelog', async (req, res) => {
       body: req.body,
       commitsCount: req.body.commits?.length,
       version: req.body.version
-    })
+    });
 
     const { commits, version, title } = req.body;
     const openaiKey = process.env.OPENAI_API_KEY;
 
     if (!commits || !Array.isArray(commits) || commits.length === 0) {
-      console.log('Error: No commits provided')
+      console.log('Error: No commits provided');
       return res.status(400).json({ error: 'No commits provided' });
     }
 
     if (!openaiKey) {
-      console.log('Error: OpenAI API key not configured')
+      console.log('Error: OpenAI API key not configured');
       return res.status(500).json({ error: 'OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.' });
     }
 
     if (!version) {
-      console.log('Error: Version required')
+      console.log('Error: Version required');
       return res.status(400).json({ error: 'Version required' });
     }
 
-    console.log('Initializing OpenAI with key:', openaiKey.substring(0, 10) + '...')
+    console.log('Initializing OpenAI with key:', `${openaiKey.substring(0, 10)}...`);
 
     const openai = new OpenAI({
-      apiKey: openaiKey,
+      apiKey: openaiKey
     });
 
     const prompt = generateChangelogPrompt(commits, version, title);
 
-    console.log('Sending request to OpenAI with prompt:', prompt)
+    console.log('Sending request to OpenAI with prompt:', prompt);
 
-    /*
     const completion = await openai.chat.completions.create({
       model: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
       messages: [
@@ -57,8 +56,9 @@ router.post('/generate-changelog', async (req, res) => {
       max_tokens: 1000,
       temperature: 0.7,
     });
-    */
 
+/*
+    Mock this if you can't afford chatGPT :)
     const mockchatGPTResponse = `
     [[versions]]
     version = "1.0.0"
@@ -74,7 +74,8 @@ router.post('/generate-changelog', async (req, res) => {
     type = "other"
     title = "Added project logo"
     description = "Included a new logo asset to represent the project visually."
-    `
+    `;
+
 
     const completion = {
       choices: [
@@ -84,14 +85,15 @@ router.post('/generate-changelog', async (req, res) => {
           }
         }
       ]
-    }
+    };
+*/
 
-    console.log('OpenAI response received')
+    console.log('OpenAI response received');
     const generatedChangelog = completion.choices[0].message.content;
 
-    console.log('Generated changelog length:', generatedChangelog.length)
+    console.log('Generated changelog length:', generatedChangelog.length);
 
-    res.json({ 
+    res.json({
       changelog: generatedChangelog,
       version,
       title,
@@ -100,61 +102,15 @@ router.post('/generate-changelog', async (req, res) => {
 
   } catch (error) {
     console.error('OpenAI API Error:', error);
-    
+
     if (error.code === 'invalid_api_key') {
       res.status(401).json({ error: 'Invalid OpenAI API key' });
     } else if (error.code === 'insufficient_quota') {
       res.status(402).json({ error: 'OpenAI API quota exceeded' });
     } else {
-      res.status(500).json({ error: 'Failed to generate changelog: ' + error.message });
+      res.status(500).json({ error: `Failed to generate changelog: ${error.message}` });
     }
   }
 });
 
-// Analyze commits and categorize them
-router.post('/analyze-commits', async (req, res) => {
-  try {
-    const { commits } = req.body;
-    const openaiKey = process.env.OPENAI_API_KEY;
-
-    if (!commits || !Array.isArray(commits) || commits.length === 0) {
-      return res.status(400).json({ error: 'No commits provided' });
-    }
-
-    if (!openaiKey) {
-      return res.status(500).json({ error: 'OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.' });
-    }
-
-    const openai = new OpenAI({
-      apiKey: openaiKey,
-    });
-
-    const prompt = analyzeCommitsPrompt(commits);
-
-    const completion = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: systemPrompts.commitAnalyzer
-        },
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-      max_tokens: 800,
-      temperature: 0.3,
-    });
-
-    const analysis = JSON.parse(completion.choices[0].message.content);
-
-    res.json(analysis);
-
-  } catch (error) {
-    console.error('OpenAI API Error:', error);
-    res.status(500).json({ error: 'Failed to analyze commits' });
-  }
-});
-
-module.exports = router; 
+module.exports = router;

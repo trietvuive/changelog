@@ -14,7 +14,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "eslint src/**/*.{js,jsx}",
-    "lint:fix": "eslint src/**/*.{js,jsx} --fix"
+    "lint:fix": "eslint src/**/*.{js,jsx} --fix",
+    "lint:toml": "taplo lint"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
@@ -32,6 +33,7 @@
     "@babel/preset-env": "^7.23.0",
     "@babel/preset-react": "^7.22.0",
     "@eslint/js": "^9.29.0",
+    "@taplo/cli": "^0.7.0",
     "@testing-library/jest-dom": "^6.1.0",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.0",

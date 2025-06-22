@@ -14,16 +14,16 @@ router.post('/save-changelog', async (req, res) => {
     }
 
     const result = await changelogReader.addVersion(version, title, changelog);
-    
+
     if (!result.success) {
       return res.status(500).json({ error: result.error });
     }
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       message: 'Changelog saved successfully',
-      version: version,
-      title: title
+      version,
+      title
     });
 
   } catch (error) {
@@ -36,7 +36,7 @@ router.post('/save-changelog', async (req, res) => {
 router.get('/versions', async (req, res) => {
   try {
     const result = await changelogReader.getAllVersions();
-    
+
     if (!result.success) {
       return res.status(500).json({ error: result.error });
     }
@@ -53,16 +53,16 @@ router.get('/versions', async (req, res) => {
 router.delete('/versions/:version', async (req, res) => {
   try {
     const { version } = req.params;
-    
+
     const result = await changelogReader.deleteVersion(version);
-    
+
     if (!result.success) {
       return res.status(404).json({ error: result.error });
     }
 
-    res.json({ 
-      success: true, 
-      message: 'Version deleted successfully' 
+    res.json({
+      success: true,
+      message: 'Version deleted successfully'
     });
 
   } catch (error) {
@@ -76,7 +76,7 @@ router.put('/versions/:version', async (req, res) => {
   try {
     const { version } = req.params;
     const { title, content: newContent } = req.body;
-    
+
     const updates = {};
     if (title !== undefined) {
       updates.title = title;
@@ -86,13 +86,13 @@ router.put('/versions/:version', async (req, res) => {
     }
 
     const result = await changelogReader.updateVersion(version, updates);
-    
+
     if (!result.success) {
       return res.status(404).json({ error: result.error });
     }
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       message: 'Version updated successfully',
       version: result.version
     });
@@ -103,4 +103,4 @@ router.put('/versions/:version', async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;

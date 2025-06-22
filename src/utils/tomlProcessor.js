@@ -15,7 +15,7 @@ class TomlProcessor {
       return {
         success: true,
         data: changelogData,
-        content: content
+        content
       };
     } catch (error) {
       if (error.code === 'ENOENT') {
@@ -51,26 +51,28 @@ class TomlProcessor {
     }
   }
 
-  async addVersion(version, title, changelog) {
+  async addVersion(_version, _title, changelog) {
     try {
-      // Read and parse the TOML file (if exists)
-      let changelogData = {};
       let fileExists = true;
+      let existingContent = '';
       try {
-        const content = await fs.readFile(this.filePath, 'utf8');
-        changelogData = TOML.parse(content);
+        existingContent = await fs.readFile(this.filePath, 'utf8');
       } catch (err) {
         if (err.code === 'ENOENT') {
           fileExists = false;
-          changelogData = {};
         } else {
           throw err;
         }
       }
 
-      // Insert the changelog TOML string after the main TOML content
-      const finalContent = changelogData + '\n' + changelog;
-      
+      let finalContent;
+      if (fileExists && existingContent.trim()) {
+        // Append with a newline if needed
+        finalContent = existingContent.trimEnd() + '\n' + changelog.trimStart();
+      } else {
+        finalContent = changelog.trimStart();
+      }
+
       await fs.writeFile(this.filePath, finalContent, 'utf8');
 
       return {
@@ -90,7 +92,7 @@ class TomlProcessor {
       const entry = ChangelogEntry.fromToml(tomlString);
       return {
         success: true,
-        entry: entry,
+        entry,
         markdown: entry.toMarkdown()
       };
     } catch (error) {
@@ -111,7 +113,7 @@ class TomlProcessor {
       }
 
       const changelogData = result.data;
-      
+
       if (!changelogData.versions) {
         return {
           success: false,
@@ -146,7 +148,7 @@ class TomlProcessor {
       }
 
       const changelogData = result.data;
-      
+
       if (!changelogData.versions) {
         return {
           success: false,
@@ -207,4 +209,4 @@ class TomlProcessor {
   }
 }
 
-module.exports = TomlProcessor; 
+module.exports = TomlProcessor;

@@ -1,4 +1,4 @@
-const { generateChangelogPrompt, analyzeCommitsPrompt, systemPrompts } = require('../prompts');
+const { generateChangelogPrompt, systemPrompts } = require('../prompts');
 
 describe('Prompts', () => {
   const mockCommits = [
@@ -28,45 +28,11 @@ describe('Prompts', () => {
     });
   });
 
-  describe('analyzeCommitsPrompt', () => {
-    it('should generate analysis prompt with commits', () => {
-      const prompt = analyzeCommitsPrompt(mockCommits);
-      expect(prompt).toBeDefined();
-      expect(prompt.length).toBeGreaterThan(0);
-    });
-
-    it('should include JSON structure in the prompt', () => {
-      const prompt = analyzeCommitsPrompt(mockCommits);
-      
-      expect(prompt).toContain('"categories":');
-      expect(prompt).toContain('"feature":');
-      expect(prompt).toContain('"fix":');
-      expect(prompt).toContain('"improvement":');
-      expect(prompt).toContain('"breaking":');
-      expect(prompt).toContain('"docs":');
-      expect(prompt).toContain('"other":');
-      expect(prompt).toContain('"summary":');
-    });
-
-    it('should handle empty commits array', () => {
-      const prompt = analyzeCommitsPrompt([]);
-      
-      expect(prompt).toContain('Commits to analyze:');
-      expect(prompt).toContain('Return only the JSON object:');
-    });
-  });
-
   describe('systemPrompts', () => {
     it('should have changelogWriter prompt', () => {
       expect(systemPrompts.changelogWriter).toBeDefined();
       expect(typeof systemPrompts.changelogWriter).toBe('string');
       expect(systemPrompts.changelogWriter).toContain('professional changelog writer');
-    });
-
-    it('should have commitAnalyzer prompt', () => {
-      expect(systemPrompts.commitAnalyzer).toBeDefined();
-      expect(typeof systemPrompts.commitAnalyzer).toBe('string');
-      expect(systemPrompts.commitAnalyzer).toContain('commit analyzer');
     });
   });
 }); 

@@ -11,7 +11,7 @@ class ChangelogReader {
   async readChangelog() {
     try {
       const result = await this.processor.readChangelog();
-      
+
       if (!result.success) {
         return {
           success: false,
@@ -21,9 +21,18 @@ class ChangelogReader {
         };
       }
 
+      // Sort versions by date (latest first)
+      if (result.data.versions && Array.isArray(result.data.versions)) {
+        result.data.versions.sort((a, b) => {
+          const dateA = a.date ? new Date(a.date) : new Date(0);
+          const dateB = b.date ? new Date(b.date) : new Date(0);
+          return dateB - dateA;
+        });
+      }
+
       // Convert TOML to markdown using ChangelogEntry
       const markdownContent = this.convertTomlToMarkdown(result.data);
-      
+
       return {
         success: true,
         content: markdownContent,
@@ -42,12 +51,12 @@ class ChangelogReader {
 
   convertTomlToMarkdown(tomlData) {
     let markdown = '';
-    
+
     // Add title and description if present
     if (tomlData.title) {
       markdown += `# ${tomlData.title}\n\n`;
     }
-    
+
     if (tomlData.description) {
       markdown += `${tomlData.description}\n\n`;
     }
@@ -56,7 +65,7 @@ class ChangelogReader {
     if (tomlData.versions && tomlData.versions.length > 0) {
       for (const versionData of tomlData.versions) {
         const entry = new ChangelogEntry(versionData);
-        markdown += entry.toMarkdown() + '\n\n';
+        markdown += `${entry.toMarkdown()}\n\n`;
       }
     }
 
@@ -66,7 +75,7 @@ class ChangelogReader {
   async getFileInfo() {
     try {
       const result = await this.processor.readChangelog();
-      
+
       if (!result.success) {
         return {
           exists: false,
@@ -79,7 +88,7 @@ class ChangelogReader {
       // Get file stats from the processor's file path
       const fs = require('fs').promises;
       const stats = await fs.stat(this.filePath);
-      
+
       return {
         exists: true,
         size: stats.size,
@@ -124,4 +133,4 @@ class ChangelogReader {
   }
 }
 
-module.exports = ChangelogReader; 
+module.exports = ChangelogReader;

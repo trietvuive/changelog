@@ -8,66 +8,64 @@ title = "Feature Release"
 
 [[versions.changes]]
 type = "feature"
-  title = "User Authentication System"
-  description = "Added user authentication system with OAuth support"
+title = "User Authentication System"
+description = "Added user authentication system with OAuth support"
 
-  [[versions.changes]]
-  type = "feature"
-  title = "Real-time Notifications"
-  description = "Implemented real-time notifications using WebSockets"
+[[versions.changes]]
+type = "feature"
+title = "Real-time Notifications"
+description = "Implemented real-time notifications using WebSockets"
 
-  [[versions.changes]]
-  type = "feature"
-  title = "Dark Mode Toggle"
-  description = "Added dark mode toggle for better user experience"
+[[versions.changes]]
+type = "feature"
+title = "Dark Mode Toggle"
+description = "Added dark mode toggle for better user experience"
 
-  [[versions.changes]]
-  type = "fix"
-  title = "Login Form Validation"
-  description = "Fixed login form validation that was allowing empty passwords"
+[[versions.changes]]
+type = "fix"
+title = "Login Form Validation"
+description = "Fixed login form validation that was allowing empty passwords"
 
-  [[versions.changes]]
-  type = "fix"
-  title = "Memory Leak Resolution"
-  description = "Resolved memory leak in notification system"
+[[versions.changes]]
+type = "fix"
+title = "Memory Leak Resolution"
+description = "Resolved memory leak in notification system"
 
-  [[versions.changes]]
-  type = "improvement"
-  title = "Database Optimization"
-  description = "Optimized database queries for better performance"
+[[versions.changes]]
+type = "improvement"
+title = "Database Optimization"
+description = "Optimized database queries for better performance"
 
 [[versions]]
 version = "2.0.0"
 date = "2024-01-01"
 title = "Major Release"
 
-  [[versions.changes]]
-  type = "breaking"
-  title = "API Endpoint Changes"
-  description = "Changed API endpoint structure from /api/v1/ to /api/v2/"
+[[versions.changes]]
+type = "breaking"
+title = "API Endpoint Changes"
+description = "Changed API endpoint structure from /api/v1/ to /api/v2/"
 
-  [[versions.changes]]
-  type = "breaking"
-  title = "Deprecated Methods"
-  description = "Removed deprecated getUser() method, use getUserById() instead"
+[[versions.changes]]
+type = "breaking"
+title = "Deprecated Methods"
+description = "Removed deprecated getUser() method, use getUserById() instead"
 
-  [[versions.changes]]
-  type = "feature"
-  title = "UI Redesign"
-  description = "Complete redesign of the user interface"
+[[versions.changes]]
+type = "feature"
+title = "UI Redesign"
+description = "Complete redesign of the user interface"
 
-  [[versions.changes]]
-  type = "feature"
-  title = "Multi-language Support"
-  description = "Added support for multiple languages"
+[[versions.changes]]
+type = "feature"
+title = "Multi-language Support"
+description = "Added support for multiple languages"
 
-  [[versions.changes]]
-  type = "fix"
-  title = "Security Vulnerability"
-  description = "Fixed critical security vulnerability in user input validation"
-
-
-    [[versions]]
+[[versions.changes]]
+type = "fix"
+title = "Security Vulnerability"
+description = "Fixed critical security vulnerability in user input validation"
+[[versions]]
     version = "1.0.0"
     date = "2025-06-22"
     title = "Adding NNUE Evaluation"

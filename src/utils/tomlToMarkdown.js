@@ -1,12 +1,12 @@
 class TomlToMarkdown {
   static convert(tomlData) {
     let markdown = '';
-    
+
     // Add title if present
     if (tomlData.title) {
       markdown += `# ${tomlData.title}\n\n`;
     }
-    
+
     if (tomlData.description) {
       markdown += `${tomlData.description}\n\n`;
     }
@@ -17,10 +17,10 @@ class TomlToMarkdown {
         // Version header
         const versionTitle = version.title || `Version ${version.version}`;
         markdown += `## ${versionTitle} - ${version.date}\n\n`;
-        
+
         // Group changes by type
         const changesByType = this.groupChangesByType(version.changes);
-        
+
         // Breaking changes first
         if (changesByType.breaking && changesByType.breaking.length > 0) {
           markdown += '### ⚠️ Breaking Changes\n\n';
@@ -29,7 +29,7 @@ class TomlToMarkdown {
           });
           markdown += '\n';
         }
-        
+
         // Features
         if (changesByType.feature && changesByType.feature.length > 0) {
           markdown += '### ✨ New Features\n\n';
@@ -38,7 +38,7 @@ class TomlToMarkdown {
           });
           markdown += '\n';
         }
-        
+
         // Fixes
         if (changesByType.fix && changesByType.fix.length > 0) {
           markdown += '### 🐛 Bug Fixes\n\n';
@@ -47,7 +47,7 @@ class TomlToMarkdown {
           });
           markdown += '\n';
         }
-        
+
         // Improvements
         if (changesByType.improvement && changesByType.improvement.length > 0) {
           markdown += '### 🔧 Improvements\n\n';
@@ -56,7 +56,7 @@ class TomlToMarkdown {
           });
           markdown += '\n';
         }
-        
+
         // Documentation
         if (changesByType.docs && changesByType.docs.length > 0) {
           markdown += '### 📚 Documentation\n\n';
@@ -65,7 +65,7 @@ class TomlToMarkdown {
           });
           markdown += '\n';
         }
-        
+
         // Other changes
         if (changesByType.other && changesByType.other.length > 0) {
           markdown += '### 🔧 Other Changes\n\n';
@@ -74,12 +74,12 @@ class TomlToMarkdown {
           });
           markdown += '\n';
         }
-        
+
         // Add separator between versions
         markdown += '---\n\n';
       });
     }
-    
+
     return markdown.trim();
   }
 
@@ -92,7 +92,7 @@ class TomlToMarkdown {
       docs: [],
       other: []
     };
-    
+
     if (changes && Array.isArray(changes)) {
       changes.forEach(change => {
         const type = change.type || 'other';
@@ -103,9 +103,9 @@ class TomlToMarkdown {
         }
       });
     }
-    
+
     return grouped;
   }
 }
 
-module.exports = TomlToMarkdown; 
+module.exports = TomlToMarkdown;

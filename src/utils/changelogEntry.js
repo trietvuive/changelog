@@ -19,7 +19,7 @@ class ChangelogEntry {
 
   toMarkdown() {
     let markdown = `## ${this.title || `Version ${this.version}`}\n\n`;
-    
+
     if (this.date) {
       markdown += `**Date:** ${this.date}\n\n`;
     }
@@ -27,13 +27,13 @@ class ChangelogEntry {
     if (this.changes && this.changes.length > 0) {
       // Group changes by type
       const groupedChanges = this.groupChangesByType();
-      
+
       for (const [type, changes] of Object.entries(groupedChanges)) {
         const typeEmoji = this.getTypeEmoji(type);
         const typeTitle = this.getTypeTitle(type);
-        
+
         markdown += `### ${typeEmoji} ${typeTitle}\n\n`;
-        
+
         for (const change of changes) {
           markdown += `- **${change.title}**`;
           if (change.description) {
@@ -50,7 +50,7 @@ class ChangelogEntry {
 
   groupChangesByType() {
     const grouped = {};
-    
+
     for (const change of this.changes) {
       const type = change.type || 'other';
       if (!grouped[type]) {
@@ -58,7 +58,7 @@ class ChangelogEntry {
       }
       grouped[type].push(change);
     }
-    
+
     return grouped;
   }
 
@@ -73,7 +73,7 @@ class ChangelogEntry {
       'removed': '🗑️',
       'other': '📝'
     };
-    
+
     return emojiMap[type] || '📝';
   }
 
@@ -88,7 +88,7 @@ class ChangelogEntry {
       'removed': 'Removed',
       'other': 'Other Changes'
     };
-    
+
     return titleMap[type] || 'Other Changes';
   }
 
@@ -127,4 +127,4 @@ class ChangelogEntry {
   }
 }
 
-module.exports = ChangelogEntry; 
+module.exports = ChangelogEntry;

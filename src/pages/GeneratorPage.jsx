@@ -1,6 +1,6 @@
-import React from 'react'
-import ChangelogGenerator from '../components/ChangelogGenerator/ChangelogGenerator.jsx'
-import './GeneratorPage.css'
+import React from 'react';
+import ChangelogGenerator from '../components/ChangelogGenerator/ChangelogGenerator.jsx';
+import './GeneratorPage.css';
 
 function GeneratorPage() {
   return (
@@ -13,7 +13,7 @@ function GeneratorPage() {
         <ChangelogGenerator />
       </main>
     </div>
-  )
+  );
 }
 
-export default GeneratorPage 
+export default GeneratorPage;

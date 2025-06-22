@@ -1,22 +1,5 @@
 # Changelog Manager
-
-A comprehensive changelog management system with both viewing and generation capabilities. Features a React-based frontend with dark mode support and a Node.js backend with GitHub integration and AI-powered changelog generation.
-
-## Features
-
-### 📖 Changelog Viewer
-- Display changelog entries from TOML format
-- Dark mode support with theme toggle
-- Responsive design for mobile and desktop
-- Markdown rendering with syntax highlighting
-
-### ✨ Changelog Generator
-- **GitHub Integration**: Connect to any GitHub repository with your own PAT
-- **Commit Analysis**: Fetch commits between specified ranges
-- **AI-Powered Summarization**: Use OpenAI to generate professional changelog entries
-- **Automatic Categorization**: Commits are automatically categorized by type
-- **Direct Save**: Save generated changelogs directly to your TOML file
-
+**DISCLAIMER: THIS IS A PROTOTYPE. DEPLOY AT YOUR OWN RISK**
 ## Quick Start
 
 1. **Install dependencies**:
@@ -101,12 +84,9 @@ Create a `.env` file that follows env.example
 
 ### GitHub Integration
 - `POST /api/github/commits` - Fetch commits from repository
-- `GET /api/github/repo/:owner/:repo` - Get repository info
-- `GET /api/github/tags/:owner/:repo` - Get repository tags
 
 ### AI Integration
 - `POST /api/llm/generate-changelog` - Generate changelog with AI
-- `POST /api/llm/analyze-commits` - Analyze and categorize commits
 
 ## Changelog Format
 

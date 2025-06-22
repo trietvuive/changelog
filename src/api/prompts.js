@@ -1,7 +1,7 @@
 // LLM Prompts for changelog generation and commit analysis
 
 const generateChangelogPrompt = (commits, version, title) => {
-  const commitsText = commits.map(commit => 
+  const commitsText = commits.map(commit =>
     `- ${commit.message} (${commit.sha.substring(0, 7)}) - ${commit.author}`
   ).join('\n');
 
@@ -37,54 +37,12 @@ Change types should be one of: feature, fix, improvement, breaking, docs, other
 Please generate the TOML changelog entry now:`;
 };
 
-const analyzeCommitsPrompt = (commits) => {
-  const commitsText = commits.map(commit => 
-    `- ${commit.message} (${commit.sha.substring(0, 7)}) - ${commit.author}`
-  ).join('\n');
-
-  return `Analyze the following commits and categorize them by type. For each commit, determine if it's a:
-
-1. feature (new functionality)
-2. fix (bug fix)
-3. improvement (enhancement)
-4. breaking (breaking change)
-5. docs (documentation)
-6. other (miscellaneous)
-
-Return the analysis as a JSON object with this structure:
-{
-  "categories": {
-    "feature": ["commit messages"],
-    "fix": ["commit messages"],
-    "improvement": ["commit messages"],
-    "breaking": ["commit messages"],
-    "docs": ["commit messages"],
-    "other": ["commit messages"]
-  },
-  "summary": {
-    "total": number,
-    "features": number,
-    "fixes": number,
-    "improvements": number,
-    "breaking": number,
-    "docs": number,
-    "other": number
-  }
-}
-
-Commits to analyze:
-${commitsText}
-
-Return only the JSON object:`;
-};
-
 const systemPrompts = {
-  changelogWriter: "You are a professional changelog writer. You create clear, well-structured changelog entries in TOML format that help users understand what has changed in software releases.",
-  commitAnalyzer: "You are a commit analyzer. You categorize commits by type and return structured JSON data."
+  changelogWriter: 'You are a professional changelog writer. You create clear, well-structured changelog entries in TOML format that help users understand what has changed in software releases.',
+  commitAnalyzer: 'You are a commit analyzer. You categorize commits by type and return structured JSON data.'
 };
 
 module.exports = {
   generateChangelogPrompt,
-  analyzeCommitsPrompt,
   systemPrompts
-}; 
+};
