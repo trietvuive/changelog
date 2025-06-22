@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import 'openai/shims/node';
 
 // Mock fetch globally
 global.fetch = jest.fn();
@@ -12,5 +13,12 @@ const localStorageMock = {
 };
 global.localStorage = localStorageMock;
 
-global.TextEncoder = require('util').TextEncoder;
-global.TextDecoder = require('util').TextDecoder; 
+// Mock TextEncoder if not available
+if (typeof TextEncoder === 'undefined') {
+  global.TextEncoder = require('util').TextEncoder;
+}
+
+// Mock TextDecoder if not available
+if (typeof TextDecoder === 'undefined') {
+  global.TextDecoder = require('util').TextDecoder;
+} 

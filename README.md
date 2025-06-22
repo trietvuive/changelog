@@ -1,5 +1,10 @@
 # Changelog Manager
 **DISCLAIMER: THIS IS A PROTOTYPE. DEPLOY AT YOUR OWN RISK**
+Use toml (better than JSON) to build the changelog
+Fetch a range of commits and use LLM to generate changelog from it. This works best since you can scrap any data automatically from GitHub API (can extend to PR description, reviews,...)
+Add to the toml file and renders the changelog
+Also have dark mode for aesthetic
+
 ## Quick Start
 
 1. **Install dependencies**:

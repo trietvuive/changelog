@@ -1,3 +1,4 @@
+import 'openai/shims/node';
 const express = require('express');
 const OpenAI = require('openai');
 const { generateChangelogPrompt, systemPrompts } = require('./prompts');

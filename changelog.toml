@@ -65,18 +65,3 @@ description = "Added support for multiple languages"
 type = "fix"
 title = "Security Vulnerability"
 description = "Fixed critical security vulnerability in user input validation"
-[[versions]]
-    version = "1.0.0"
-    date = "2025-06-22"
-    title = "Adding NNUE Evaluation"
-    
-    [[versions.changes]]
-    type = "feature"
-    title = "Initial NNUE integration"
-    description = "Introduced foundational support for NNUE (Efficiently Updatable Neural Networks) evaluation, enabling enhanced positional assessment capabilities."
-    
-    [[versions.changes]]
-    type = "other"
-    title = "Added project logo"
-    description = "Included a new logo asset to represent the project visually."
-    
