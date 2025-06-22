@@ -109,9 +109,9 @@ Create a `.env` file that follows env.example
 - `npm lint` - Run linter
 
 ### Environment Variables
-- `PORT` - Server port (default: 3000)
 - `GITHUB_TOKEN` - GitHub Personal Access Token
 - `OPENAI_API_KEY` - OpenAI API Key
+- `OPENAI_MODEL` - OpenAI model
 
 ## Security Notes
 
