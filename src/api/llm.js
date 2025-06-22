@@ -58,7 +58,7 @@ router.post('/generate-changelog', async (req, res) => {
     });
 
 /*
-    Mock this if you can't afford chatGPT :)
+    Mock this if you got rate-limited by chatGPT :)
     const mockchatGPTResponse = `
     [[versions]]
     version = "1.0.0"
