@@ -1,12 +1,13 @@
 # Changelog Manager
 **DISCLAIMER: THIS IS CURRENTLY A PROTOTYPE. DEPLOY AT YOUR OWN RISK**
 - use toml (better than JSON) to build the changelog
-- fetch a range of commits and use LLM to generate changelog from it. This works best since you can scrap any data automatically from GitHub API (can extend to PR description, reviews,...)
+- fetch a range of commits and use LLM to generate editable changelog from it. This works best since you can scrap any data automatically from GitHub API (can extend to PR description, reviews,...)
 - add to the toml file and renders the changelog
 - add unit tests to correct weird behaviors
 - also have dark mode for aesthetic
 
-https://github.com/user-attachments/assets/3414d2a0-96a9-4728-a39b-deb6f0ecdd1c
+https://github.com/user-attachments/assets/093dd775-1537-4411-8461-5a7c5438d690
+
 
 ## Quick Start
 
