@@ -50,7 +50,7 @@ https://github.com/user-attachments/assets/3414d2a0-96a9-4728-a39b-deb6f0ecdd1c
 
 ### Environment Variables
 
-Create a `.env` file that follows env.example
+Create a `.env` file that follows `env.example`
 
 ### Security Notes
 - Never commit your `.env` file to version control
