@@ -29,6 +29,9 @@ https://github.com/user-attachments/assets/3414d2a0-96a9-4728-a39b-deb6f0ecdd1c
    
    # OpenAI API Key
    OPENAI_API_KEY=sk-your_openai_api_key_here
+
+   # OpenAI model
+   OPENAI_MODEL=gpt-4
    ```
 
 3. **Start the development server**:
@@ -75,7 +78,7 @@ Create a `.env` file that follows `env.example`
    - Leave empty to fetch recent commits
 4. **Release Information**:
    - Enter version number (e.g., "2.1.0")
-   - Add release title (optional)
+   - Add release title
 5. **Generate**:
    - Click "Fetch Commits" to retrieve commits from GitHub
    - Review the commits list
